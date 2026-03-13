@@ -4,8 +4,17 @@ plugins {
     `maven-publish`
 }
 
-group = providers.gradleProperty("GROUP").get()
-version = providers.gradleProperty("VERSION_NAME").get()
+val isJitPackBuild = providers.environmentVariable("JITPACK").orNull == "true"
+group = if (isJitPackBuild) {
+    providers.environmentVariable("GROUP").orElse(providers.gradleProperty("GROUP")).get()
+} else {
+    providers.gradleProperty("GROUP").get()
+}
+version = if (isJitPackBuild) {
+    providers.environmentVariable("VERSION").orElse(providers.gradleProperty("VERSION_NAME")).get()
+} else {
+    providers.gradleProperty("VERSION_NAME").get()
+}
 
 android {
     namespace = "com.flexitabs"

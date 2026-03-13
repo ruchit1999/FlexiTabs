@@ -197,6 +197,14 @@ Repository: com.github.ruchit1999:flexitabs
 Version tag: v1.0.0
 ```
 
+JitPack resolves artifacts by Git tag. That means the consumer dependency must use the tag string exactly:
+
+```kotlin
+implementation("com.github.ruchit1999:flexitabs:v1.0.0")
+```
+
+Internally, the library build is configured to use JitPack's `VERSION` environment variable during JitPack builds, so the published artifact version matches the requested tag.
+
 Release flow:
 
 1. Push the repository to GitHub.
