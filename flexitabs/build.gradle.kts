@@ -7,14 +7,6 @@ plugins {
 group = providers.gradleProperty("GROUP").get()
 version = providers.gradleProperty("VERSION_NAME").get()
 
-val githubOwner = providers.gradleProperty("POM_GITHUB_OWNER")
-val githubRepo = providers.gradleProperty("POM_GITHUB_REPO")
-val githubActor = providers.environmentVariable("GITHUB_ACTOR")
-val githubToken = providers.environmentVariable("GITHUB_TOKEN")
-val githubPackagesUrl = githubOwner.zip(githubRepo) { owner, repo ->
-    "https://maven.pkg.github.com/$owner/$repo"
-}
-
 android {
     namespace = "com.flexitabs"
     compileSdk {
@@ -65,19 +57,6 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.tooling)
 
     testImplementation(libs.junit)
-}
-
-publishing {
-    repositories {
-        maven {
-            name = "GitHubPackages"
-            url = uri(githubPackagesUrl.get())
-            credentials {
-                username = githubActor.orElse(providers.gradleProperty("POM_GITHUB_OWNER")).orNull
-                password = githubToken.orElse(providers.environmentVariable("GH_TOKEN")).orNull
-            }
-        }
-    }
 }
 
 afterEvaluate {

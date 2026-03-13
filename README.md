@@ -1,8 +1,8 @@
 # FlexiTabs
 
-`FlexiTabs` is an Android UI library for dynamic slider tabs that works in both the classic View system and Jetpack Compose.
+`FlexiTabs` is an Android UI library for dynamic slider tabs that works in both the View system and Jetpack Compose.
 
-It is built for segmented controls such as:
+It is designed for segmented controls such as:
 
 - `Video | Image | Templates`
 - `Home | Explore | Trending | Profile`
@@ -13,25 +13,25 @@ Current version: `v1.0.0`
 
 Release description:
 
-> Initial production-ready release of FlexiTabs with dynamic 3-10 tab support, animated indicator transitions, XML + Compose APIs, accessibility support, sample app coverage, and GitHub Packages publishing.
+> Initial production-ready release of FlexiTabs with dynamic 3-10 tab support, animated indicator transitions, XML and Compose APIs, accessibility support, sample app coverage, and JitPack distribution.
 
 ## Features
 
 - Dynamic tab count from 3 to 10
-- Fixed and scrollable display modes
+- Fixed and scrollable modes
 - Animated sliding indicator
 - Text-only, icon-only, and icon + text tabs
-- Native custom View API for XML-based projects
-- Native Compose API for Compose-based projects
-- Adaptive text sizing with minimum text size support
+- Native XML/View API
+- Native Compose API
+- Adaptive text sizing
 - Styling via `TabStyle`
-- Accessibility support with TalkBack-friendly tab focus
-- Sample app with Compose and XML showcases
+- Accessibility support
+- Sample app for Compose and XML
 
 ## Project Structure
 
 - `:flexitabs` - reusable Android library
-- `:sample` - demo app for Compose and XML integration
+- `:sample` - demo app
 
 ## Requirements
 
@@ -42,22 +42,16 @@ Release description:
 
 ## Installation
 
-### GitHub Packages
+### JitPack
 
-Add the GitHub Packages repository:
+Add JitPack to your repositories:
 
 ```kotlin
 dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        maven {
-            url = uri("https://maven.pkg.github.com/ruchit1999/flexitabs")
-            credentials {
-                username = System.getenv("GITHUB_ACTOR")
-                password = System.getenv("GITHUB_TOKEN")
-            }
-        }
+        maven { url = uri("https://jitpack.io") }
     }
 }
 ```
@@ -66,7 +60,7 @@ Add the dependency:
 
 ```kotlin
 dependencies {
-    implementation("io.github.ruchit1999:flexitabs:1.0.0")
+    implementation("com.github.ruchit1999:flexitabs:v1.0.0")
 }
 ```
 
@@ -146,8 +140,6 @@ fun setStyle(style: TabStyle)
 
 ## Styling
 
-The component is configured through `TabStyle`.
-
 ```kotlin
 val style = TabStyle(
     backgroundColor = 0xFF0F172A.toInt(),
@@ -169,16 +161,14 @@ val style = TabStyle(
 
 ## Architecture
 
-The library is intentionally split into focused packages:
-
-- `model` - immutable public models such as `TabItem`, `TabState`, and `TabStyle`
-- `layout` - tab measurement and width calculation
-- `render` - background, indicator, and tab content rendering
-- `touch` - hit-testing and tab selection resolution
-- `animation` - indicator animation controller
+- `model` - public models such as `TabItem`, `TabState`, and `TabStyle`
+- `layout` - width calculation and positioning
+- `render` - background, indicator, and content rendering
+- `touch` - hit-testing
+- `animation` - indicator motion controller
 - `view` - `FlexiTabsView` and accessibility handling
 - `compose` - Compose implementation
-- `listener` - public callback contract
+- `listener` - public callbacks
 
 ## Accessibility
 
@@ -196,36 +186,23 @@ The `:sample` module includes:
 - scrollable Compose example
 - dedicated XML showcase activity
 
-## Publishing
+## JitPack Notes
 
-Publishing metadata is centralized in [`gradle.properties`](/home/infizer/Documents/ruchit/FlexiTabs/gradle.properties).
+This project includes [`jitpack.yml`](/home/infizer/Documents/ruchit/FlexiTabs/jitpack.yml) so JitPack builds the library module and publishes it from tagged releases.
 
-Configured artifact:
+Coordinates:
 
 ```text
-Group: io.github.ruchit1999
-Artifact: flexitabs
-Version: 1.0.0
-Tag: v1.0.0
-Repository: GitHub Packages
+Repository: com.github.ruchit1999:flexitabs
+Version tag: v1.0.0
 ```
 
-The library publication is defined in [`flexitabs/build.gradle.kts`](/home/infizer/Documents/ruchit/FlexiTabs/flexitabs/build.gradle.kts).
+Release flow:
 
-### GitHub Release Flow
-
-1. Push the repository to `github.com/ruchit1999/flexitabs`.
-2. Ensure `GITHUB_TOKEN` or package publish permissions are available in GitHub Actions.
-3. Create and push tag `v1.0.0`.
-4. The workflow in [`.github/workflows/publish.yml`](/home/infizer/Documents/ruchit/FlexiTabs/.github/workflows/publish.yml) runs verification and publishes the `release` artifact to GitHub Packages.
-
-### Manual Publish
-
-```bash
-export GITHUB_ACTOR=ruchit1999
-export GITHUB_TOKEN=<github-token>
-./gradlew :flexitabs:publishReleasePublicationToGitHubPackagesRepository
-```
+1. Push the repository to GitHub.
+2. Create and push tag `v1.0.0`.
+3. Wait for JitPack to build the tag.
+4. Consume the library with `com.github.ruchit1999:flexitabs:v1.0.0`.
 
 ## Verification
 
