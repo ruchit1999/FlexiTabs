@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">FlexiTabs Sample</string>
+    <string name="sample_title">FlexiTabs</string>
+    <string name="sample_subtitle">Production-style dynamic slider tabs for XML and Jetpack Compose.</string>
+    <string name="open_xml_sample">Open XML Showcase</string>
+    <string name="xml_sample_title">XML Showcase</string>
+    <string name="xml_fixed_title">3 Tabs XML Example</string>
+    <string name="xml_four_title">4 Tabs XML Example</string>
+    <string name="xml_scrollable_title">Scrollable XML Example</string>
+    <string name="selected_label">Selected index: %1$d</string>
+    <string name="selected_zero">Selected index: 0</string>
+</resources>

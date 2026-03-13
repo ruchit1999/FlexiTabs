@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="FlexiTabsView">
+        <attr name="ft_backgroundColor" format="color" />
+        <attr name="ft_indicatorColor" format="color" />
+        <attr name="ft_selectedTextColor" format="color" />
+        <attr name="ft_unselectedTextColor" format="color" />
+        <attr name="ft_iconTintColor" format="color" />
+        <attr name="ft_cornerRadius" format="dimension" />
+        <attr name="ft_height" format="dimension" />
+        <attr name="ft_textSize" format="dimension" />
+        <attr name="ft_minTextSize" format="dimension" />
+        <attr name="ft_iconSize" format="dimension" />
+        <attr name="ft_horizontalPadding" format="dimension" />
+        <attr name="ft_indicatorInset" format="dimension" />
+        <attr name="ft_animationDuration" format="integer" />
+        <attr name="ft_displayMode">
+            <enum name="fixed" value="0" />
+            <enum name="scrollable" value="1" />
+            <enum name="auto" value="2" />
+        </attr>
+    </declare-styleable>
+</resources>

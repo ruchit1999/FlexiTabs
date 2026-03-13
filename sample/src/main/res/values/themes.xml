@@ -1,0 +1,9 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="Theme.FlexiTabs.Sample" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@color/sample_background</item>
+        <item name="colorSurface">@color/sample_surface</item>
+        <item name="android:colorBackground">@color/sample_background</item>
+        <item name="android:windowLightStatusBar" >true</item>
+    </style>
+</resources>
