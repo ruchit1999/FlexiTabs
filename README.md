@@ -11,6 +11,14 @@ It supports:
 - XML and Compose APIs
 - shared architecture across rendering, layout, touch, and animation
 
+## Release
+
+Current release line: `v1.0.0`
+
+Release description:
+
+> FlexiTabs v1.0.0 is the first production-ready release of the library, shipping dynamic slider tabs for Android Views and Jetpack Compose with animation, adaptive sizing, accessibility support, and GitHub Packages publishing support.
+
 ## Modules
 
 - `:flexitabs` - reusable SDK/library module
@@ -18,13 +26,35 @@ It supports:
 
 ## Installation
 
+### GitHub Packages
+
+Add the GitHub Packages repository:
+
 ```kotlin
-dependencies {
-    implementation("io.github.<username>:flexitabs:1.0.0")
+dependencyResolutionManagement {
+    repositories {
+        google()
+        mavenCentral()
+        maven {
+            url = uri("https://maven.pkg.github.com/<github-username>/flexitabs")
+            credentials {
+                username = System.getenv("GITHUB_ACTOR")
+                password = System.getenv("GITHUB_TOKEN")
+            }
+        }
+    }
 }
 ```
 
-For local development:
+Then add the dependency:
+
+```kotlin
+dependencies {
+    implementation("io.github.<github-username>:flexitabs:1.0.0")
+}
+```
+
+### Local Module
 
 ```kotlin
 dependencies {
@@ -136,19 +166,33 @@ The library is split into focused packages:
 
 ## Publishing
 
-The library module already includes `maven-publish` setup.
+The library module includes a GitHub Packages publishing configuration and a GitHub Actions workflow.
 
 Artifacts:
 
 ```text
-Group: io.github.<username>
+Group: io.github.<github-username>
 Artifact: flexitabs
 Version: 1.0.0
+Git tag: v1.0.0
 ```
 
-For JitPack, publishing works from the GitHub repository directly once pushed.
+### Release flow
 
-For Maven Central, update the coordinates, developer metadata, and signing configuration in [`flexitabs/build.gradle.kts`](/home/infizer/Documents/ruchit/FlexiTabs/flexitabs/build.gradle.kts).
+1. Update the placeholders in `gradle.properties` with your real GitHub username, repo, and developer info.
+2. Commit the project to GitHub.
+3. Create and push a tag such as `v1.0.0`.
+4. GitHub Actions publishes the `release` publication to GitHub Packages.
+
+### Manual publish
+
+```bash
+export GITHUB_ACTOR=<github-username>
+export GITHUB_TOKEN=<github-token>
+./gradlew :flexitabs:publishReleasePublicationToGitHubPackagesRepository
+```
+
+The publishing metadata is centralized in [`gradle.properties`](/home/infizer/Documents/ruchit/FlexiTabs/gradle.properties) and the repository/publication setup lives in [`flexitabs/build.gradle.kts`](/home/infizer/Documents/ruchit/FlexiTabs/flexitabs/build.gradle.kts).
 
 ## Demo App
 

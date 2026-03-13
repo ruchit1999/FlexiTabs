@@ -4,6 +4,17 @@ plugins {
     `maven-publish`
 }
 
+group = providers.gradleProperty("GROUP").get()
+version = providers.gradleProperty("VERSION_NAME").get()
+
+val githubOwner = providers.gradleProperty("POM_GITHUB_OWNER")
+val githubRepo = providers.gradleProperty("POM_GITHUB_REPO")
+val githubActor = providers.environmentVariable("GITHUB_ACTOR")
+val githubToken = providers.environmentVariable("GITHUB_TOKEN")
+val githubPackagesUrl = githubOwner.zip(githubRepo) { owner, repo ->
+    "https://maven.pkg.github.com/$owner/$repo"
+}
+
 android {
     namespace = "com.flexitabs"
     compileSdk {
@@ -56,35 +67,48 @@ dependencies {
     testImplementation(libs.junit)
 }
 
+publishing {
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri(githubPackagesUrl.get())
+            credentials {
+                username = githubActor.orElse(providers.gradleProperty("POM_GITHUB_OWNER")).orNull
+                password = githubToken.orElse(providers.environmentVariable("GH_TOKEN")).orNull
+            }
+        }
+    }
+}
+
 afterEvaluate {
     publishing {
         publications {
             create<MavenPublication>("release") {
                 from(components["release"])
-                groupId = "io.github.yourusername"
-                artifactId = "flexitabs"
-                version = "1.0.0"
+                groupId = project.group.toString()
+                artifactId = providers.gradleProperty("POM_ARTIFACT_ID").get()
+                version = project.version.toString()
 
                 pom {
-                    name.set("FlexiTabs")
-                    description.set("Dynamic slider tab Android UI SDK for Views and Jetpack Compose.")
-                    url.set("https://github.com/yourusername/flexitabs")
+                    name.set(providers.gradleProperty("POM_NAME"))
+                    description.set(providers.gradleProperty("POM_DESCRIPTION"))
+                    url.set(providers.gradleProperty("POM_URL"))
                     licenses {
                         license {
-                            name.set("The Apache License, Version 2.0")
-                            url.set("https://www.apache.org/licenses/LICENSE-2.0.txt")
+                            name.set(providers.gradleProperty("POM_LICENSE_NAME"))
+                            url.set(providers.gradleProperty("POM_LICENSE_URL"))
                         }
                     }
                     developers {
                         developer {
-                            id.set("yourusername")
-                            name.set("Your Name")
+                            id.set(providers.gradleProperty("POM_DEVELOPER_ID"))
+                            name.set(providers.gradleProperty("POM_DEVELOPER_NAME"))
                         }
                     }
                     scm {
-                        connection.set("scm:git:git://github.com/yourusername/flexitabs.git")
-                        developerConnection.set("scm:git:ssh://github.com/yourusername/flexitabs.git")
-                        url.set("https://github.com/yourusername/flexitabs")
+                        url.set(providers.gradleProperty("POM_SCM_URL"))
+                        connection.set(providers.gradleProperty("POM_SCM_CONNECTION"))
+                        developerConnection.set(providers.gradleProperty("POM_SCM_DEV_CONNECTION"))
                     }
                 }
             }
