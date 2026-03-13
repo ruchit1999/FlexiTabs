@@ -30,6 +30,7 @@ import com.flexitabs.touch.DefaultTabTouchResolver
 import com.flexitabs.touch.TabTouchResolver
 import kotlin.math.ceil
 import kotlin.math.floor
+import androidx.core.graphics.withTranslation
 
 class FlexiTabsView @JvmOverloads constructor(
     context: Context,
@@ -122,19 +123,18 @@ class FlexiTabsView @JvmOverloads constructor(
         updateIndicatorRect(animatedIndicatorIndex)
         indicatorRenderer.render(canvas, indicatorRect, style)
 
-        canvas.save()
-        canvas.translate(-contentOffsetX, 0f)
-        tabRects.forEachIndexed { index, rect ->
-            tabContentRenderer.render(
-                canvas = canvas,
-                context = context,
-                tabBounds = rect,
-                item = tabs[index],
-                selected = index == selectedIndex,
-                style = style
-            )
+        canvas.withTranslation(-contentOffsetX, 0f) {
+            tabRects.forEachIndexed { index, rect ->
+                tabContentRenderer.render(
+                    canvas = this,
+                    context = context,
+                    tabBounds = rect,
+                    item = tabs[index],
+                    selected = index == selectedIndex,
+                    style = style
+                )
+            }
         }
-        canvas.restore()
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
