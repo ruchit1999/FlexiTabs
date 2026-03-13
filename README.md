@@ -60,7 +60,7 @@ Add the dependency:
 
 ```kotlin
 dependencies {
-    implementation("com.github.ruchit1999:flexitabs:v1.0.0")
+    implementation("com.github.ruchit1999.flexitabs:flexitabs:v1.0.1")
 }
 ```
 
@@ -193,7 +193,7 @@ This project includes [`jitpack.yml`](/home/infizer/Documents/ruchit/FlexiTabs/j
 Coordinates:
 
 ```text
-Repository: com.github.ruchit1999:flexitabs
+Repository: com.github.ruchit1999.flexitabs:flexitabs
 Version tag: v1.0.0
 ```
 
@@ -210,7 +210,7 @@ Release flow:
 1. Push the repository to GitHub.
 2. Create and push tag `v1.0.0`.
 3. Wait for JitPack to build the tag.
-4. Consume the library with `com.github.ruchit1999:flexitabs:v1.0.0`.
+4. Consume the library with `com.github.ruchit1999.flexitabs:flexitabs:v1.0.0`.
 
 ## Verification
 
