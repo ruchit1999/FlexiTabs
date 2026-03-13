@@ -1,28 +1,44 @@
 # FlexiTabs
 
-`FlexiTabs` is a dynamic slider tab Android UI SDK for apps that need a segmented control style component in both the classic View system and Jetpack Compose.
+`FlexiTabs` is an Android UI library for dynamic slider tabs that works in both the classic View system and Jetpack Compose.
 
-It supports:
+It is built for segmented controls such as:
 
-- 3 to 10 dynamic tabs
-- fixed and scrollable layouts
-- animated sliding indicator
-- text, icon, or icon + text tabs
-- XML and Compose APIs
-- shared architecture across rendering, layout, touch, and animation
+- `Video | Image | Templates`
+- `Home | Explore | Trending | Profile`
 
 ## Release
 
-Current release line: `v1.0.0`
+Current version: `v1.0.0`
 
 Release description:
 
-> FlexiTabs v1.0.0 is the first production-ready release of the library, shipping dynamic slider tabs for Android Views and Jetpack Compose with animation, adaptive sizing, accessibility support, and GitHub Packages publishing support.
+> Initial production-ready release of FlexiTabs with dynamic 3-10 tab support, animated indicator transitions, XML + Compose APIs, accessibility support, sample app coverage, and GitHub Packages publishing.
 
-## Modules
+## Features
 
-- `:flexitabs` - reusable SDK/library module
-- `:sample` - demo app with Compose and XML showcases
+- Dynamic tab count from 3 to 10
+- Fixed and scrollable display modes
+- Animated sliding indicator
+- Text-only, icon-only, and icon + text tabs
+- Native custom View API for XML-based projects
+- Native Compose API for Compose-based projects
+- Adaptive text sizing with minimum text size support
+- Styling via `TabStyle`
+- Accessibility support with TalkBack-friendly tab focus
+- Sample app with Compose and XML showcases
+
+## Project Structure
+
+- `:flexitabs` - reusable Android library
+- `:sample` - demo app for Compose and XML integration
+
+## Requirements
+
+- `minSdk 23`
+- `compileSdk 36`
+- Java 11 compatible Android build
+- AndroidX enabled
 
 ## Installation
 
@@ -36,7 +52,7 @@ dependencyResolutionManagement {
         google()
         mavenCentral()
         maven {
-            url = uri("https://maven.pkg.github.com/<github-username>/flexitabs")
+            url = uri("https://maven.pkg.github.com/ruchit1999/flexitabs")
             credentials {
                 username = System.getenv("GITHUB_ACTOR")
                 password = System.getenv("GITHUB_TOKEN")
@@ -46,15 +62,15 @@ dependencyResolutionManagement {
 }
 ```
 
-Then add the dependency:
+Add the dependency:
 
 ```kotlin
 dependencies {
-    implementation("io.github.<github-username>:flexitabs:1.0.0")
+    implementation("io.github.ruchit1999:flexitabs:1.0.0")
 }
 ```
 
-### Local Module
+### Local Development
 
 ```kotlin
 dependencies {
@@ -74,7 +90,21 @@ FlexiTabs(
         TabItem("templates", "Templates", android.R.drawable.ic_menu_agenda)
     ),
     selectedIndex = selectedIndex,
+    style = TabStyle(),
     onTabSelected = { selectedIndex = it }
+)
+```
+
+Public Compose API:
+
+```kotlin
+@Composable
+fun FlexiTabs(
+    tabs: List<TabItem>,
+    selectedIndex: Int,
+    modifier: Modifier = Modifier,
+    style: TabStyle = FlexiTabsDefaults.style(),
+    onTabSelected: (Int) -> Unit
 )
 ```
 
@@ -96,32 +126,15 @@ binding.flexiTabs.setTabs(
         TabItem("profile", "Profile")
     )
 )
+
 binding.flexiTabs.setSelectedIndex(0)
+
 binding.flexiTabs.setOnTabSelectedListener { index ->
-    // react to tab change
+    // handle selection
 }
 ```
 
-## Styling
-
-```kotlin
-val style = TabStyle(
-    backgroundColor = 0xFF0F172A.toInt(),
-    indicatorColor = 0xFFE0F2FE.toInt(),
-    selectedTextColor = 0xFF0F172A.toInt(),
-    unselectedTextColor = 0xFFE2E8F0.toInt(),
-    iconTintColor = 0xFFE2E8F0.toInt(),
-    cornerRadiusDp = 24f,
-    textSizeSp = 14f,
-    minTextSizeSp = 10f,
-    animationDurationMillis = 320,
-    displayMode = TabDisplayMode.AUTO
-)
-```
-
-## API
-
-### View API
+Public View API:
 
 ```kotlin
 fun setTabs(items: List<TabItem>)
@@ -131,77 +144,88 @@ fun setOnTabSelectedListener(listener: OnTabSelectedListener)
 fun setStyle(style: TabStyle)
 ```
 
-### Compose API
+## Styling
+
+The component is configured through `TabStyle`.
 
 ```kotlin
-@Composable
-fun FlexiTabs(
-    tabs: List<TabItem>,
-    selectedIndex: Int,
-    modifier: Modifier = Modifier,
-    style: TabStyle = FlexiTabsDefaults.style(),
-    onTabSelected: (Int) -> Unit
+val style = TabStyle(
+    backgroundColor = 0xFF0F172A.toInt(),
+    indicatorColor = 0xFFE0F2FE.toInt(),
+    selectedTextColor = 0xFF0F172A.toInt(),
+    unselectedTextColor = 0xFFE2E8F0.toInt(),
+    iconTintColor = 0xFFE2E8F0.toInt(),
+    cornerRadiusDp = 24f,
+    heightDp = 48f,
+    textSizeSp = 14f,
+    minTextSizeSp = 10f,
+    iconSizeDp = 18f,
+    horizontalPaddingDp = 16f,
+    indicatorInsetDp = 4f,
+    animationDurationMillis = 280,
+    displayMode = TabDisplayMode.AUTO
 )
 ```
 
 ## Architecture
 
-The library is split into focused packages:
+The library is intentionally split into focused packages:
 
-- `model` - immutable config and state models
-- `layout` - tab sizing and positioning strategy
-- `render` - background, indicator, and tab content drawing
-- `touch` - hit-testing abstraction
-- `animation` - indicator motion controller
-- `view` - XML/View implementation and accessibility
-- `compose` - native Compose API reusing the same domain/style model
-- `listener` - public callbacks
+- `model` - immutable public models such as `TabItem`, `TabState`, and `TabStyle`
+- `layout` - tab measurement and width calculation
+- `render` - background, indicator, and tab content rendering
+- `touch` - hit-testing and tab selection resolution
+- `animation` - indicator animation controller
+- `view` - `FlexiTabsView` and accessibility handling
+- `compose` - Compose implementation
+- `listener` - public callback contract
 
 ## Accessibility
 
-- TalkBack-friendly virtual tab nodes via `ExploreByTouchHelper`
-- selected state announcements
-- per-tab content descriptions
-- disabled tab handling
+- TalkBack-friendly virtual child tab nodes
+- Selected tab announcement support
+- Per-tab content descriptions
+- Disabled tab support
 
-## Publishing
+## Sample App
 
-The library module includes a GitHub Packages publishing configuration and a GitHub Actions workflow.
-
-Artifacts:
-
-```text
-Group: io.github.<github-username>
-Artifact: flexitabs
-Version: 1.0.0
-Git tag: v1.0.0
-```
-
-### Release flow
-
-1. Update the placeholders in `gradle.properties` with your real GitHub username, repo, and developer info.
-2. Commit the project to GitHub.
-3. Create and push a tag such as `v1.0.0`.
-4. GitHub Actions publishes the `release` publication to GitHub Packages.
-
-### Manual publish
-
-```bash
-export GITHUB_ACTOR=<github-username>
-export GITHUB_TOKEN=<github-token>
-./gradlew :flexitabs:publishReleasePublicationToGitHubPackagesRepository
-```
-
-The publishing metadata is centralized in [`gradle.properties`](/home/infizer/Documents/ruchit/FlexiTabs/gradle.properties) and the repository/publication setup lives in [`flexitabs/build.gradle.kts`](/home/infizer/Documents/ruchit/FlexiTabs/flexitabs/build.gradle.kts).
-
-## Demo App
-
-The sample app includes:
+The `:sample` module includes:
 
 - 3-tab Compose example
 - 4-tab Compose example
 - scrollable Compose example
 - dedicated XML showcase activity
+
+## Publishing
+
+Publishing metadata is centralized in [`gradle.properties`](/home/infizer/Documents/ruchit/FlexiTabs/gradle.properties).
+
+Configured artifact:
+
+```text
+Group: io.github.ruchit1999
+Artifact: flexitabs
+Version: 1.0.0
+Tag: v1.0.0
+Repository: GitHub Packages
+```
+
+The library publication is defined in [`flexitabs/build.gradle.kts`](/home/infizer/Documents/ruchit/FlexiTabs/flexitabs/build.gradle.kts).
+
+### GitHub Release Flow
+
+1. Push the repository to `github.com/ruchit1999/flexitabs`.
+2. Ensure `GITHUB_TOKEN` or package publish permissions are available in GitHub Actions.
+3. Create and push tag `v1.0.0`.
+4. The workflow in [`.github/workflows/publish.yml`](/home/infizer/Documents/ruchit/FlexiTabs/.github/workflows/publish.yml) runs verification and publishes the `release` artifact to GitHub Packages.
+
+### Manual Publish
+
+```bash
+export GITHUB_ACTOR=ruchit1999
+export GITHUB_TOKEN=<github-token>
+./gradlew :flexitabs:publishReleasePublicationToGitHubPackagesRepository
+```
 
 ## Verification
 
