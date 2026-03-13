@@ -60,7 +60,7 @@ Add the dependency:
 
 ```kotlin
 dependencies {
-    implementation("com.github.ruchit1999.flexitabs:flexitabs:v1.0.1")
+    implementation("com.github.ruchit1999:flexitabs:v1.0.2")
 }
 ```
 
